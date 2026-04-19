@@ -1,33 +1,34 @@
-import { Component, signal } from '@angular/core';
-import { Navbar } from './layout/navbar/navbar';
+import { AfterViewInit, Component, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { PostsList } from './layout/posts-list/posts-list';
 
 @Component({
   selector: 'app-root',
-  imports: [Navbar, FormsModule],
+  imports: [PostsList, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('Hello my first Angular app with standalone components');
+export class App implements AfterViewInit {
+  protected appPostTitle = signal('App Post Title!');
 
-  protected readonly imageUrl = 'https://angular.io/assets/images/logos/angular/angular.svg';
+  protected isLoginedIn = signal(false);
 
-  protected isDisabled = false;
-  protected isActive = false;
-  protected fruit = 'apple';
-  protected userName = 'Hieu'
+  @ViewChild(PostsList) postList: any;
 
-  buttonxClicked() {
-    console.log('Button clicked');
+
+  childMessage: string = '';
+
+  constructor() {
+    console.log(this.postList);
+  } 
+
+  ngAfterViewInit() {
+    console.log(this.postList);
+    // this.childMessage = this.postList.childMessage;
   }
 
-  keyEnter(event: Object) {
-    console.log('Key enter: ', event);
-  }
-
-  updateUserName(username:HTMLInputElement) {
-    this.userName = username.value;
-    console.log('Username updated: ', this.userName);
+  recievedEvent($event: any) {
+    this.childMessage = $event;
+    console.log($event);
   }
 }
